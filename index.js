@@ -20,14 +20,15 @@ app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(express.static("public"));
 
-app.use(
-  session({
-    secret: "security-demo-secret-key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+app.use((req, res, next) => {
+  res.cookie("demo_cookie", "this_is_a_demo_value", {
+    httpOnly: false,
+    secure: true,
+    sameSite: "lax",
+    maxAge: 1000 * 60 * 60,
+  });
+  next();
+});
 
 // inicijalizacija baze podataka
 /*(async () => {
