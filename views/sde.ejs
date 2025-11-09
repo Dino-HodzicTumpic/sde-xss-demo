@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/output.css" rel="stylesheet" />
+    <title>SDE Demo - Sensitive Data Exposure</title>
+    <script type="module" src="/scripts/sde.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6">Sensitive Data Exposure - demo</h1>
+      <p class="mb-3">
+        Kada je ranjivost uključena lozinka ce se pohraniti kao plaintext, a
+        kada isključena pohraniti će se hash od lozinke, ispod login forme se
+        nalazi popis svih korisnika kako bi se vidjelo kako se lozinke
+        pohranjuju ovisno dal je ranjivot on/off.
+      </p>
+      <div class="mb-6">
+        <label class="flex items-center gap-2 text-lg">
+          <input type="checkbox" id="sde-checkbox" class="h-5 w-5" checked />
+          <span id="sde-label-text">Ranjivost uključena</span>
+        </label>
+      </div>
+
+      <section class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Registracija korisnika</h2>
+        <form id="register-form" class="flex flex-col gap-4">
+          <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            required
+            class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+            class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
+          >
+            Register
+          </button>
+        </form>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold mb-4">Popis korisnika</h2>
+        <div class="overflow-x-auto">
+          <table
+            class="min-w-full bg-white border border-gray-200 rounded-md shadow-sm table-auto"
+          >
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="py-2 px-4 border-b text-left">ID</th>
+                <th class="py-2 px-4 border-b text-left">Username</th>
+                <th class="py-2 px-4 border-b text-left">Password</th>
+              </tr>
+            </thead>
+            <tbody id="users-table">
+              <% users.forEach(user => { %>
+              <tr class="hover:bg-gray-50">
+                <td class="py-2 px-4 border-b text-left"><%= user.id %></td>
+                <td class="py-2 px-4 border-b text-left">
+                  <%= user.username %>
+                </td>
+                <td class="py-2 px-4 border-b text-left">
+                  <%= user.passwordDisplay %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

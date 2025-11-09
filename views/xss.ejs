@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/output.css" rel="stylesheet" />
+    <script type="module" src="/scripts/xss.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="flex flex-col gap-4 justify-center items-center">
+      <h2 class="text-2xl font-bold">XSS - pohranjeni(stored)</h2>
+      <p class="max-w-sm md:max-w-1/2">
+        Kada je ranjivost uključena moguće je u input  polje unositi
+        komentare koji imaju npr script tagove te ce se takav komentar
+        pospremiti u bazu trajno, te izvršavati kao js kod svim korsinicima koji
+        posjete strranicu dok je ranjivost uključena.
+
+        Unesite nesto ovakvo npr i napravite refresh nakon kojeg će se kod izvršiti: 
+         <pre class="mt-2 p-2 bg-gray-100 rounded">
+        &lt;script&gt;alert("this is your cookie" + document.cookie)&lt;/script&gt;
+        </pre>
+      </p>
+      <form id="xss-form" class="flex flex-col items-center gap-4">
+        <label for="">
+          <input type="checkbox" id="xss-checkbox" name="XSS" <%= xss ? "checked" : "" %> />
+          <span id="xss-label">Ranjivost uključena</span>
+        </label>
+        <input
+          type="text"
+          id="comment"
+          placeholder="Unesite svoj komentar"
+          class="rounded border p-2 md:min-w-2xl"
+        />
+
+        <button
+          class="bg-gray-400 border rounded p-2 cursor-pointer hover:bg-gray-500 max-w-2xs"
+          type="submit"
+        >
+          Pošalji komentar
+        </button>
+      </form>
+
+      <div class="flex flex-col">
+        <span class="text-lg font-bold mb-2">Komentari korisnika:</span>
+        <div id="comments-container">
+          <% comments.forEach(comment => {%>
+          <div
+            class="bg-gray-200 rounded p-2 border mb-3 min-w-1/2 flex flex-col"
+          >
+            <span> <%=comment.formatted_datetime %></span>
+            <% if (xss) { %> <%- comment.message %> <% } else { %> <%=
+            comment.message %> <% } %>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
